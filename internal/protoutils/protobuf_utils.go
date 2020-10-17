@@ -93,6 +93,28 @@ func toAllReadOptionsFromPosition(position position.Position) *api.ReadReq_Optio
 }
 
 func toReadStreamOptionsFromStreamAndStreamRevision(streamID string, streamRevision uint64) *api.ReadReq_Options_Stream {
+	if streamRevision == 0 {
+		return &api.ReadReq_Options_Stream{
+			Stream: &api.ReadReq_Options_StreamOptions{
+				StreamIdentifier: &shared.StreamIdentifier{
+					StreamName: []byte(streamID),
+				},
+				RevisionOption: &api.ReadReq_Options_StreamOptions_Start{},
+			},
+		}
+	}
+
+	if streamRevision == ^uint64(0) {
+		return &api.ReadReq_Options_Stream{
+			Stream: &api.ReadReq_Options_StreamOptions{
+				StreamIdentifier: &shared.StreamIdentifier{
+					StreamName: []byte(streamID),
+				},
+				RevisionOption: &api.ReadReq_Options_StreamOptions_End{},
+			},
+		}
+	}
+
 	return &api.ReadReq_Options_Stream{
 		Stream: &api.ReadReq_Options_StreamOptions{
 			StreamIdentifier: &shared.StreamIdentifier{
