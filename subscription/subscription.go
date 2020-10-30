@@ -72,7 +72,7 @@ func (subscription *Subscription) Start() error {
 					recordedEvent := event.GetEvent()
 					streamIdentifier := recordedEvent.GetStreamIdentifier()
 
-					if subscription.eventAppeared != nil {
+					if subscription.eventAppeared != nil && recordedEvent != nil {
 						subscription.eventAppeared(messages.RecordedEvent{
 							EventID:        protoutils.EventIDFromProto(recordedEvent),
 							EventType:      recordedEvent.Metadata[system_metadata.SystemMetadataKeysType],
